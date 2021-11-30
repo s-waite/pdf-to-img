@@ -12,7 +12,7 @@ WHITE_FG=$( tput setaf 7 )
 RESET=$( tput sgr0 )
 
 PROMPT_FG=$BLUE_FG
-NUMBER_FG=$RED_FG
+NUM_FG=$RED_FG
 
 # checking if the input file exists, exiting if it doesn't
 if [[ ! (-e "$1") ]]; then
@@ -43,8 +43,8 @@ while true; do
     reset_cursor
     echo "${PROMPT_FG}Select your output format:${RESET}
 
-    ${NUMBER_FG}1.${RESET} PNG
-    ${NUMBER_FG}2.${RESET} JPG
+    ${NUM_FG}1.${RESET} PNG
+    ${NUM_FG}2.${RESET} JPG
 "
     get_input
 
@@ -83,12 +83,13 @@ clear_screen
 # loop where user selects colorspace for output
 while true; do
     reset_cursor
-    echo "Colorspace
+    echo "${PROMPT_FG}Colorspace${RESET}
 
-    1. Grayscale
-    2. Color
+    ${NUM_FG}1.${RESET} Grayscale
+    ${NUM_FG}2.${RESET} ${MAGENTA_FG}C${GREEN_FG}o${YELLOW_FG}l${BLUE_FG}o${RED_FG}r${RESET}
     "
     get_input
+
     if [[ $SELECTION == 1 ]]; then
         COLORSPACE="-colorspace Gray -background white -depth 8"
         break
@@ -99,7 +100,7 @@ while true; do
         echo "Please enter a valid number"
     fi
 done
-echo "Please wait..."
+echo "${MAGENTA_FG}Please wait...${RESET}"
 
 # using imagemagick to convert the pdf using the user supplied values
 zsh <<- _EOF_
