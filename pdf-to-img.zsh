@@ -10,8 +10,8 @@ CYAN_FG=$( tput setaf 6 )
 WHITE_FG=$( tput setaf 7 )
 RESET=$( tput sgr0 )
 
-
-
+PROMPT_FG=$BLUE_FG
+NUMBER_FG=$RED_FG
 
 if [[ ! (-e "$1") ]]; then
     echo "ERROR: please include a valid pdf as the first argument"
@@ -27,17 +27,20 @@ clear_screen () {
     tput ed || tput cd
 }
 
+get_input () {
+    read "SELECTION?${GREEN_FG}Input: ${RESET}"
+}
+
 clear_screen
 
 while true; do
     reset_cursor
-    echo "${BLUE_FG}Select your output format:${RESET}
+    echo "${PROMPT_FG}Select your output format:${RESET}
 
-    ${RED_FG}1.${RESET} PNG
-    ${RED_FG}2.${RESET} JPG
+    ${NUMBER_FG}1.${RESET} PNG
+    ${NUMBER_FG}2.${RESET} JPG
 "
-
-    read "SELECTION?${GREEN_FG}Input: ${RESET}"
+    get_input
 
     if [[ $SELECTION == 1 ]]; then
         FILETYPE="png"
@@ -54,9 +57,11 @@ clear_screen
 
 while true; do
     reset_cursor
-    echo "Input your desired width in pixels
+    echo "${PROMPT_FG}Input your desired width in pixels${RESET}
     "
-    read "WIDTH?Input: "
+    get_input
+    WIDTH=$SELECTION
+
     if [[ $WIDTH =~ ^[0-9]+$ && $WIDTH -ge 10 && $WIDTH -le 50000 ]]; then
         break
     else
@@ -73,7 +78,7 @@ while true; do
     1. Grayscale
     2. Color
     "
-    read "SELECTION?Input: "
+    get_input
     if [[ $SELECTION == 1 ]]; then
         COLORSPACE="-colorspace Gray -background white -depth 8"
         break
