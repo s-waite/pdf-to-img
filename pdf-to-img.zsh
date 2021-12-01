@@ -14,6 +14,18 @@ RESET=$( tput sgr0 )
 PROMPT_FG=$BLUE_FG
 NUM_FG=$RED_FG
 
+
+
+while getopts ":a" opt; do
+  case $opt in
+    a) echo "-a was triggered!" >&2 ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+
+
+
 # checking if the input file exists, exiting if it doesn't
 if [[ ! (-e "$1") ]]; then
     echo "ERROR: please include a valid pdf as the first argument"
@@ -103,6 +115,7 @@ done
 echo "${MAGENTA_FG}Please wait...${RESET}"
 
 # using imagemagick to convert the pdf using the user supplied values
+cd $PWD 
 zsh <<- _EOF_
 convert -density 1000 $1 $COLORSPACE -alpha remove -alpha off -resize ${WIDTH}x${WIDTH}^ -set filename:f "%t" "%[filename:f].$FILETYPE"
 _EOF_
