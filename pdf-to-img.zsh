@@ -16,13 +16,28 @@ NUM_FG=$RED_FG
 
 
 
-while getopts ":a" opt; do
+while getopts "c:a:f:" opt; do
   case $opt in
-    a) echo "-a was triggered!" >&2 ;;
+    c) colorspace=$OPTARG ;;
+    w) width=$OPTARG ;;
+    f) filetype=$OPTARG ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
   esac
 done
 
+# checking colorspace
+if [[ $colorspace == "color" ]]; then
+    colorspace=''
+elif [[ $colorspace == "grayscale" ]]; then
+    colorspace="-colorspace Gray -background white -depth 8"
+else
+    echo "Invalid colorspace ${colorspace}"
+fi
+
+# checking width
+if [[ ! ( $width =~ ^[0-9]+$ && $width -ge 10 && $width -le 50000 ) ]]; then
+    echo "Invalid width $width"
+fi
 
 
 
@@ -32,89 +47,94 @@ if [[ ! (-e "$1") ]]; then
     exit 1
 fi
 
-# moving terminal cursor to top left corner
-reset_cursor () {
-    tput cup 0 0
-}
 
-# clearing terminal screen
-clear_screen () {
-    reset_cursor
-    tput ed || tput cd
-}
+cd $PWD 
+zsh <<- _EOF_
+convert -density 1000 $1 $COLORSPACE -alpha remove -alpha off -resize ${WIDTH}x${WIDTH}^ -set filename:f "%t" "%[filename:f].$FILETYPE"
+_EOF_
+# # moving terminal cursor to top left corner
+# reset_cursor () {
+#     tput cup 0 0
+# }
 
-# input function to use in the menus
-get_input () {
-    read "SELECTION?${GREEN_FG}Input: ${RESET}"
-}
+# # clearing terminal screen
+# clear_screen () {
+#     reset_cursor
+#     tput ed || tput cd
+# }
 
-clear_screen
+# # input function to use in the menus
+# get_input () {
+#     read "SELECTION?${GREEN_FG}Input: ${RESET}"
+# }
 
-# loop where user selects the output format
-while true; do
-    reset_cursor
-    echo "${PROMPT_FG}Select your output format:${RESET}
+# clear_screen
 
-    ${NUM_FG}1.${RESET} PNG
-    ${NUM_FG}2.${RESET} JPG
-"
-    get_input
+# # loop where user selects the output format
+# while true; do
+#     reset_cursor
+#     echo "${PROMPT_FG}Select your output format:${RESET}
 
-    if [[ $SELECTION == 1 ]]; then
-        FILETYPE="png"
-        break
-    elif [[ $SELECTION == 2 ]]; then
-        FILETYPE="jpg"
-        break
-    else
-        echo "Please enter a valid selection"
-    fi
-done
+#     ${NUM_FG}1.${RESET} PNG
+#     ${NUM_FG}2.${RESET} JPG
+# "
+#     get_input
 
-clear_screen
+#     if [[ $SELECTION == 1 ]]; then
+#         FILETYPE="png"
+#         break
+#     elif [[ $SELECTION == 2 ]]; then
+#         FILETYPE="jpg"
+#         break
+#     else
+#         echo "Please enter a valid selection"
+#     fi
+# done
 
-# loop where user selects the output image size
-while true; do
-    reset_cursor
-    echo "${PROMPT_FG}Input your desired width in pixels${RESET}
-    "
-    get_input
-    # get_input assigns the result to SELECTION
-    WIDTH=$SELECTION
+# clear_screen
 
-    # ensuring the user entered a valid value
-    if [[ $WIDTH =~ ^[0-9]+$ && $WIDTH -ge 10 && $WIDTH -le 50000 ]]; then
-        break
-    else
-        echo "Please enter a valid number"
-    fi
-done
+# # loop where user selects the output image size
+# while true; do
+#     reset_cursor
+#     echo "${PROMPT_FG}Input your desired width in pixels${RESET}
+#     "
+#     get_input
+#     # get_input assigns the result to SELECTION
+#     WIDTH=$SELECTION
 
-clear_screen
+#     # ensuring the user entered a valid value
+#     if [[ $WIDTH =~ ^[0-9]+$ && $WIDTH -ge 10 && $WIDTH -le 50000 ]]; then
+#         break
+#     else
+#         echo "Please enter a valid number"
+#     fi
+# done
 
-# loop where user selects colorspace for output
-while true; do
-    reset_cursor
-    echo "${PROMPT_FG}Colorspace${RESET}
+# clear_screen
 
-    ${NUM_FG}1.${RESET} Grayscale
-    ${NUM_FG}2.${RESET} ${MAGENTA_FG}C${GREEN_FG}o${YELLOW_FG}l${BLUE_FG}o${RED_FG}r${RESET}
-    "
-    get_input
+# # loop where user selects colorspace for output
+# while true; do
+#     reset_cursor
+#     echo "${PROMPT_FG}Colorspace${RESET}
 
-    if [[ $SELECTION == 1 ]]; then
-        COLORSPACE="-colorspace Gray -background white -depth 8"
-        break
-    elif [[ $SELECTION == 2 ]]; then
-        COLORSPACE=''
-        break
-    else
-        echo "Please enter a valid number"
-    fi
-done
-echo "${MAGENTA_FG}Please wait...${RESET}"
+#     ${NUM_FG}1.${RESET} Grayscale
+#     ${NUM_FG}2.${RESET} ${MAGENTA_FG}C${GREEN_FG}o${YELLOW_FG}l${BLUE_FG}o${RED_FG}r${RESET}
+#     "
+#     get_input
 
-# using imagemagick to convert the pdf using the user supplied values
+#     if [[ $SELECTION == 1 ]]; then
+#         COLORSPACE="-colorspace Gray -background white -depth 8"
+#         break
+#     elif [[ $SELECTION == 2 ]]; then
+#         COLORSPACE=''
+#         break
+#     else
+#         echo "Please enter a valid number"
+#     fi
+# done
+# echo "${MAGENTA_FG}Please wait...${RESET}"
+
+# # using imagemagick to convert the pdf using the user supplied values
 cd $PWD 
 zsh <<- _EOF_
 convert -density 1000 $1 $COLORSPACE -alpha remove -alpha off -resize ${WIDTH}x${WIDTH}^ -set filename:f "%t" "%[filename:f].$FILETYPE"
