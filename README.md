@@ -22,7 +22,6 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -82,8 +81,6 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `s-waite`, `pdf-to-img`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `PDF to Image`, `project_description`
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
@@ -95,35 +92,24 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Since this is a shell script you can either run it with a absolute path, or copy/link it to you PATH
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/s-waite/pdf-to-img.git
    ```
-3. Install NPM packages
+2. cd the repo folder and run the script
    ```sh
-   npm install
+   ./pdf-to-img.zsh
    ```
-4. Enter your API in `config.js`
+3. Move the script to your path if you want to be able to run it with 'pdftoimg' from anywhere
    ```js
-   const API_KEY = 'ENTER YOUR API';
+   mv /.pdf-to-img /usr/local/bin/pdftoimg
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -133,9 +119,11 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Three flags are provided:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+* -c: colorspace, can either be grayscale or color
+* -w: width of output in px
+* -f: image output filetype, can be png or jpg
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -154,7 +142,6 @@ See the [open issues](https://github.com/s-waite/pdf-to-img/issues) for a full l
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -170,7 +157,6 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- LICENSE -->
