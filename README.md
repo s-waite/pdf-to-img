@@ -30,7 +30,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/s-waite/pdf-to-img">
-    <img src="" alt="Logo" width="80" height="80">
+    <img src="https://github.com/s-waite/pdf-to-img/blob/main/img/icon.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">PDF to Image</h3>
